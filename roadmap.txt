@@ -1,0 +1,41 @@
+1. Client installation : 
+    Vite + react
+    react icons
+    redux toolkit
+    material ui
+
+2. Building responsive ui :
+
+3. Server installation :
+    express
+    dotenv
+    mongoose
+    cors
+    nodemon
+    jsonwebtoken
+    bcrypt
+
+4. Basic server setup :
+
+5. Mongoose Schema :
+    user :
+        name
+        email
+        password
+        tasks
+    
+6. User Controller : 
+    register
+    log in
+    add Task
+    edit Task
+    delete task
+    get all tasks
+
+7. Postman testing :
+
+8. RTK Query implementation :
+
+9. Integration in client :
+
+10. Optimization.

@@ -3,6 +3,7 @@
     react icons
     redux toolkit
     material ui
+    react-router-dom
 
 2. Building responsive ui :
 

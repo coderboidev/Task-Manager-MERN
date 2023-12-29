@@ -11,10 +11,21 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from "../redux/service";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginPage, setLoginPage] = useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [login, loginData] = useLoginMutation();
+  const [register, registerData] = useRegisterMutation();
 
   const handleShowPassword = () => {
     setShowPassword((pre) => !pre);
@@ -22,6 +33,23 @@ const Register = () => {
 
   const handleToggleLoginPage = () => {
     setLoginPage((pre) => !pre);
+  };
+
+  const handleLogin = async () => {
+    const body = {
+      email,
+      password,
+    };
+    await login(body);
+  };
+
+  const handleRegister = async () => {
+    const data = {
+      name,
+      email,
+      password,
+    };
+    await register(data);
   };
 
   return (
@@ -44,12 +72,14 @@ const Register = () => {
               type="text"
               placeholder="Enter your name..."
               sx={{ backgroundColor: "white", borderRadius: "10px" }}
+              onChange={(e) => setName(e.target.value)}
             />
           )}
           <TextField
             type="email"
             placeholder="Enter your email..."
             sx={{ backgroundColor: "white", borderRadius: "10px" }}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <FormControl
             variant="standard"
@@ -65,6 +95,7 @@ const Register = () => {
                   </IconButton>
                 </InputAdornment>
               }
+              onChange={(e) => setPassword(e.target.value)}
             />
           </FormControl>
           <Button
@@ -80,6 +111,7 @@ const Register = () => {
                 cursor: "pointer",
               },
             }}
+            onClick={loginPage ? handleLogin : handleRegister}
           >
             {loginPage ? "Login" : "Register"}
           </Button>

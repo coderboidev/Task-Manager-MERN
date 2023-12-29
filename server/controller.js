@@ -30,6 +30,8 @@ exports.register = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
     });
+    // res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
+    // res.header("Access-Control-Allow-Credentials", true);
     return res.status(201).json({ msg: `Welcome ${result.name} !` });
   } catch (err) {
     res.status(400).json({ msg: "Error in register !", err: err.message });
@@ -58,24 +60,44 @@ exports.login = async (req, res) => {
     res.cookie("token", token, {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
+      sameSite: "none",
+      secure: false,
     });
+    res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
+    res.header("Access-Control-Allow-Credentials", true);
     return res.status(200).json({ msg: `Welcome back ${userExixts.name} !` });
   } catch (err) {
     res.status(400).json({ msg: "Error in login !", err: err.message });
   }
 };
 
+exports.logout = async (req, res) => {
+  try {
+    res.cookie("token", "", {
+      maxAge: Date.now(),
+      httpOnly: true,
+      sameSite: "none",
+      secure: false,
+    });
+    res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
+    res.header("Access-Control-Allow-Credentials", true);
+    return res.status(200).json({ msg: ` ${userExixts.name} Logged out !` });
+  } catch (err) {
+    res.status(400).json({ msg: "Error in logout !", err: err.message });
+  }
+};
+
 exports.addTask = async (req, res) => {
   try {
     const { task } = req.body;
-    await User.findByIdAndUpdate(
+    const taski = await User.findByIdAndUpdate(
       req.user._id,
       {
         $push: { tasks: task },
       },
       { new: true }
     );
-    res.status(201).json({ msg: "Task Created !" });
+    res.status(201).json({ msg: "Task Created !", taski });
   } catch (err) {
     res.status(400).json({ msg: "Error in addTask !", err: err.message });
   }
@@ -83,11 +105,11 @@ exports.addTask = async (req, res) => {
 
 exports.deleteTask = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { task } = req.body;
     await User.findByIdAndUpdate(
       req.user._id,
       {
-        $pull: { tasks: { _id: id } },
+        $pull: { tasks: task },
       },
       { new: true }
     );
@@ -99,18 +121,20 @@ exports.deleteTask = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { task } = req.body;
-    await User.findByIdAndUpdate(
-      { _id: req.user._id, "tasks._id": id },
-      {
-        $set: { "tasks.title": task },
-      },
-      { new: true }
-    );
-    res.status(201).json({ msg: "Task Deleted !" });
+    const { newTask, oldTask } = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const taskIndex = user.tasks.findIndex((task) => task === oldTask);
+    if (taskIndex === -1) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    user.tasks[taskIndex] = newTask;
+    await user.save();
+    res.status(201).json({ msg: "Task Updated !" });
   } catch (err) {
-    res.status(400).json({ msg: "Error in deleteTask !", err: err.message });
+    res.status(400).json({ msg: "Error in updateTask !", err: err.message });
   }
 };
 

@@ -11,10 +11,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import {
-  useLoginMutation,
-  useRegisterMutation,
-} from "../redux/service";
+import { useLoginMutation, useRegisterMutation } from "../redux/service";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +38,23 @@ const Register = () => {
       email,
       password,
     };
-    await login(body);
+    const result = await login(body);
+    if (result?.data) {
+      toast.success(result.data.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
+    if (result?.error) {
+      toast.error(result.error.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
   };
 
   const handleRegister = async () => {
@@ -49,7 +63,23 @@ const Register = () => {
       email,
       password,
     };
-    await register(data);
+    const result = await register(data);
+    if (result?.data) {
+      toast.success(result.data.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
+    if (result?.error) {
+      toast.error(result.error.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
   };
 
   return (

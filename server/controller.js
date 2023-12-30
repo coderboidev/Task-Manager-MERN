@@ -29,9 +29,9 @@ exports.register = async (req, res) => {
     res.cookie("token", token, {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
     });
-    // res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
-    // res.header("Access-Control-Allow-Credentials", true);
     return res.status(201).json({ msg: `Welcome ${result.name} !` });
   } catch (err) {
     res.status(400).json({ msg: "Error in register !", err: err.message });
@@ -61,10 +61,8 @@ exports.login = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
       sameSite: "none",
-      secure: false,
+      secure: true,
     });
-    res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
-    res.header("Access-Control-Allow-Credentials", true);
     return res.status(200).json({ msg: `Welcome back ${userExixts.name} !` });
   } catch (err) {
     res.status(400).json({ msg: "Error in login !", err: err.message });
@@ -77,11 +75,9 @@ exports.logout = async (req, res) => {
       maxAge: Date.now(),
       httpOnly: true,
       sameSite: "none",
-      secure: false,
+      secure: true,
     });
-    res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
-    res.header("Access-Control-Allow-Credentials", true);
-    return res.status(200).json({ msg: ` ${userExixts.name} Logged out !` });
+    return res.status(200).json({ msg: ` Logged out !` });
   } catch (err) {
     res.status(400).json({ msg: "Error in logout !", err: err.message });
   }
@@ -90,14 +86,14 @@ exports.logout = async (req, res) => {
 exports.addTask = async (req, res) => {
   try {
     const { task } = req.body;
-    const taski = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       req.user._id,
       {
         $push: { tasks: task },
       },
       { new: true }
     );
-    res.status(201).json({ msg: "Task Created !", taski });
+    res.status(201).json({ msg: "Task Created !" });
   } catch (err) {
     res.status(400).json({ msg: "Error in addTask !", err: err.message });
   }
@@ -140,7 +136,7 @@ exports.updateTask = async (req, res) => {
 
 exports.getUserDetails = async (req, res) => {
   try {
-    res.status(200).json(req.user);
+    return res.status(200).json(req.user);
   } catch (err) {
     res.status(400).json({ msg: "Error in register !", err: err.message });
   }

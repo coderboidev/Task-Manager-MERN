@@ -4,6 +4,7 @@ import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "../redux/service";
 import { MdDone } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const Task = ({ no, title }) => {
   const [newTitle, setNewTitle] = useState(title);
@@ -22,14 +23,46 @@ const Task = ({ no, title }) => {
       newTask: newTitle,
       oldTask: title,
     };
-    await updateTask(data);
+    const result = await updateTask(data);
+    if (result?.data) {
+      toast.success(result.data.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
+    if (result?.error) {
+      toast.error(result.error.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
   };
 
   const handleDelete = async () => {
     const data = {
       task: title,
     };
-    await deleteTask(data);
+    const result = await deleteTask(data);
+    if (result?.data) {
+      toast.success(result.data.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
+    if (result?.error) {
+      toast.error(result.error.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
   };
 
   return (

@@ -12,12 +12,13 @@ import {
 import { IoAddCircle } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Task from "../components/Task";
-import {  useState } from "react";
+import { useState } from "react";
 import {
   useAddTaskMutation,
   useGetUserDetailsQuery,
   useLogoutMutation,
 } from "../redux/service";
+import { toast } from "react-toastify";
 
 const Tasks = () => {
   const [open, setOpen] = useState(false);
@@ -32,8 +33,24 @@ const Tasks = () => {
     const data = {
       task: title,
     };
-    await addTask(data);
+    const result = await addTask(data);
     setTitle("");
+    if (result?.data) {
+      toast.success(result.data.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
+    if (result?.error) {
+      toast.error(result.error.msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
   };
   const handleOpen = (e) => {
     setAnchorE1(e.currentTarget);
@@ -44,11 +61,21 @@ const Tasks = () => {
   };
   const handleName = async () => {
     handleClose();
-    alert(token?.name);
+    toast.info(data?.name, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      theme: "colored",
+    });
   };
   const handleEmail = async () => {
     handleClose();
-    alert(token?.email);
+    toast.info(data?.email, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      theme: "colored",
+    });
   };
   const handleLogout = async () => {
     await logout();
@@ -81,7 +108,7 @@ const Tasks = () => {
                 maxHeight: "55%",
               }}
             >
-              <Stack flexDirection={"column"} gap={2} >
+              <Stack flexDirection={"column"} gap={2}>
                 {data ? (
                   data.tasks?.length > 0 ? (
                     data?.tasks?.map((e, i) => {

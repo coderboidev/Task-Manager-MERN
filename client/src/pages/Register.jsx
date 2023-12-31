@@ -1,14 +1,12 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  OutlinedInput,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useLoginMutation, useRegisterMutation } from "../redux/service";
@@ -22,8 +20,8 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [login, loginData] = useLoginMutation();
-  const [register, registerData] = useRegisterMutation();
+  const [login] = useLoginMutation();
+  const [register] = useRegisterMutation();
 
   const handleShowPassword = () => {
     setShowPassword((pre) => !pre);

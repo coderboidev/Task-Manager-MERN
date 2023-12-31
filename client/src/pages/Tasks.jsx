@@ -1,14 +1,12 @@
-import {
-  Box,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  Menu,
-  MenuItem,
-  OutlinedInput,
-  Stack,
-  Typography,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { IoAddCircle } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Task from "../components/Task";
